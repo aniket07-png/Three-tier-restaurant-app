@@ -1,0 +1,23 @@
+---
+name: PR Trigger
+on:
+  pull_request:
+    branches:
+      - main
+      
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  build-test:
+    uses: ./.github/workflows/reusable-build-test.yml
+    with:
+      run_test: true
+
+  pr-comment:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR Checks Summary
+        run: echo "PR checks passed for branch - ${{ github.head_ref }}"
