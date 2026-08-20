@@ -1,0 +1,81 @@
+---
+name: Build and Test
+on:
+  workflow_call:
+    inputs:
+      run_test:
+        default: true
+        type: boolean
+        
+      node-version:
+        default: '20.x'
+        type: string
+
+jobs:
+  lint:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: 
+        os:
+          - ubuntu-latest
+          - macos-latest
+        node-version:
+          - 18.x
+          - 20.x
+          - 22.x
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+         node-version: ${{ matrix.node-version }} # Specify your version here (e.g., 18, 20, 22)
+         cache: 'npm'       # Automatically caches dependencies
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint # Make sure "lint" is configured in your package.json
+
+  # 2. SECURITY SCANNING JOB (SAST)
+  sast:
+    name: SAST Security Scan
+    runs-on: ubuntu-latest
+    needs: lint # Only run security scans if code passes linting
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/javascript # Curated security rulesets for Node.js/JavaScript
+
+  # 3. AUTOMATED TESTING JOB
+  test:
+    name: Unit Testing (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    needs: sast # Only test if code passes security criteria
+    if: ${{ inputs.run_test }}
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] # Define a single version or an array matrix
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Test Suite
+        run: npm test
