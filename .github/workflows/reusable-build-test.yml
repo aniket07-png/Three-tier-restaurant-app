@@ -33,10 +33,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
          node-version: ${{ matrix.node-version }} # Specify your version here (e.g., 18, 20, 22)
-         cache: 'npm'       # Automatically caches dependencies
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run Linter
         run: npm run lint # Make sure "lint" is configured in your package.json
