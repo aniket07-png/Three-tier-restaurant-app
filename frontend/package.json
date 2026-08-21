@@ -16,3 +16,9 @@
   }
 }
 
+{
+  "scripts": {
+    "lint": "eslint .",
+    "test": "..."
+  }
+}
