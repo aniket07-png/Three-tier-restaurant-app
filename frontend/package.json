@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -13,12 +14,5 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "vite": "^5.3.4"
-  }
-}
-
-{
-  "scripts": {
-    "lint": "eslint .",
-    "test": "..."
   }
 }
