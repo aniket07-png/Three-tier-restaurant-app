@@ -40,10 +40,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/Three-tier-restaurant-app:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/Three-tier-restaurant-app:latest
+            ${{ secrets.DOCKER_USERNAME }}/three-tier-app:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/three-tier-app:latest
 
       - name: Set Image URL
         id: image
         run: |
-          echo "image_url=${{ secrets.DOCKER_USERNAME }}/Three-tier-restaurant-app:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          echo "image_url=${{ secrets.DOCKER_USERNAME }}/three-tier-app:${{ github.sha }}" >> "$GITHUB_OUTPUT"
