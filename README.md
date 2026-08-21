@@ -50,3 +50,6 @@ In your terminal on the host machine, execute:
 export VITE_API_BASE_URL="/api"
 
 docker compose up -d --build
+
+
+[![Build and Test](https://github.com/aniket07-png/Three-tier-restaurant-app/actions/workflows/reusable-build-test.yml/badge.svg)](https://github.com/aniket07-png/Three-tier-restaurant-app/actions/workflows/reusable-build-test.yml)
