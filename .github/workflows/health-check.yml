@@ -1,0 +1,47 @@
+---
+name: Docker Health Check
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pull Latest Docker Image
+        run: docker pull ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest:latest
+
+      - name: Run Container
+        run: docker run -d --name MyApp -p 8080:8080 ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest:latest
+
+      - name: Wait for Application
+        run: sleep 5
+
+      - name: Health Check
+        id: health
+        run: |
+          if curl -f http://localhost:8080/health; then
+            echo "Health check PASSED"
+            echo "status=PASSED" >> "$GITHUB_OUTPUT"
+          else
+            echo "Health check FAILED"
+            echo "status=FAILED" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+      - name: Create Health Check Summary
+        if: always()
+        run: |
+          echo "## Health Check Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Image: ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: ${{ steps.health.outputs.status || 'FAILED' }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Time: $(date)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Stop and Remove Container
+        if: always()
+        run: |
+          docker stop MyApp || true
+          docker rm MyApp || true
