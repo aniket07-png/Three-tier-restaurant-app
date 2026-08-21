@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Pull Latest Docker Image
-        run: docker pull ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest:latest
+        run: docker pull ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest
 
       - name: Run Container
-        run: docker run -d --name MyApp -p 8080:8080 ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest:latest
+        run: docker run -d --name MyApp -p 8080:8080 ${{ secrets.GITHUB_USERNAME }}/three-tier-app:latest
 
       - name: Wait for Application
         run: sleep 5
