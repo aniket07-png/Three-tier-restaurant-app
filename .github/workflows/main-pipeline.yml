@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker.yml
     secrets: inherit
     with:
-      image_name: Three-tier-restaurant-app
+      image_name: three-tier-app
       image_tag: latest
 
   deploy:
