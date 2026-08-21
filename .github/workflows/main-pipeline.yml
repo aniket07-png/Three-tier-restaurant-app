@@ -1,0 +1,27 @@
+---
+name: CI/CD Pipeline
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-build-test.yml
+    with:
+      test_run: true
+
+  test:
+    needs: build
+    uses: ./.github/workflows/reusable-docker.yml
+    secrets: inherit
+    with:
+      image_name: Three-tier-restaurant-app
+      image_tag: latest
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - name: Deploy
+        run: echo "Deploying Image - ${{ needs.test.outputs.image_url }} to Production"
+      
