@@ -82,13 +82,16 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: npm
+        cache-dependency-path: frontend/package-lock.json
 
     - name: Install Dependencies
+      working-directory: ./frontend
       run: npm ci
 
     - name: Run Test Suite
       id: run_tests
       continue-on-error: true
+      working-directory: ./frontend
       run: npm test
 
     - name: Set Test Result
