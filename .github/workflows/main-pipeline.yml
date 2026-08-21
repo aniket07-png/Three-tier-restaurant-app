@@ -7,7 +7,7 @@ jobs:
   build:
     uses: ./.github/workflows/reusable-build-test.yml
     with:
-      test_run: true
+      run_test: true
 
   test:
     needs: build
