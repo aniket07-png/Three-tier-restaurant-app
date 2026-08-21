@@ -35,9 +35,11 @@ jobs:
          node-version: ${{ matrix.node-version }} # Specify your version here (e.g., 18, 20, 22)
 
       - name: Install Dependencies
+        working-directory: ./frontend
         run: npm install
 
       - name: Run Linter
+        working-directory: ./frontend
         run: npm run lint # Make sure "lint" is configured in your package.json
 
   # 2. SECURITY SCANNING JOB (SAST)
