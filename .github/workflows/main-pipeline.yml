@@ -23,9 +23,6 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: ubuntu-latest
-    environment: main
-    steps:
-      - name: Deploy
-        run: echo "Deploying Image - ${{ needs.test.outputs.image_url }} to Production"
+    uses: ./.github/workflows/deploy-to-server.yml
+    secrets: inherit
       
