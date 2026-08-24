@@ -20,8 +20,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull Latest Images
-        run: docker compose pull
       - name: Start Application
         run: |
          docker compose up -d
