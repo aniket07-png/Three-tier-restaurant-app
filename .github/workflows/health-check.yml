@@ -11,25 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull Latest Docker Image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/three-tier-app:latest
-
-      - name: Run Container
-        run: docker run -d --name MyApp -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/three-tier-app:latest
+      - name: Start Application
+        run: |
+         docker compose up -d
 
       - name: Wait for Application
         run: sleep 5
 
-      - name: Debug Container
+      - name: Debug Containers
         run: |
-         echo "=== Containers ==="
-         docker ps -a
-
-         echo "=== Port Mapping ==="
-         docker port MyApp
-
-         echo "=== Container Logs ==="
-         docker logs MyApp
+         docker compose ps
+         docker compose logs
 
       - name: Health Check
         id: health
