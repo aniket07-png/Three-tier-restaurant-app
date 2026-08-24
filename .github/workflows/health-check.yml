@@ -21,6 +21,8 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Start Application
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
          docker compose up -d
 
