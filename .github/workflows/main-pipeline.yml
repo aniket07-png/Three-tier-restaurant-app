@@ -1,7 +1,7 @@
----
 name: CI/CD Pipeline
+
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
   push:
     branches:
@@ -21,8 +21,31 @@ jobs:
       image_name: three-tier-app
       image_tag: latest
 
-  deploy:
+  scan:
+    name: Scan Docker Image
     needs: test
-    uses: ./.github/workflows/deploy-to-server.yml
-    secrets: inherit
-      
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Scan Docker Image for Vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/three-tier-app:latest'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+  deploy:
+    needs: scan
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Deploy
+        run: echo "Deploying image - ${{ needs.test.outputs.image_url }} to production"
