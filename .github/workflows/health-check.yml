@@ -20,6 +20,17 @@ jobs:
       - name: Wait for Application
         run: sleep 5
 
+      - name: Debug Container
+        run: |
+         echo "=== Containers ==="
+         docker ps -a
+
+         echo "=== Port Mapping ==="
+         docker port MyApp
+
+         echo "=== Container Logs ==="
+         docker logs MyApp
+
       - name: Health Check
         id: health
         run: |
