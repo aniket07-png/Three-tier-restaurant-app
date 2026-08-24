@@ -2,8 +2,6 @@ services:
 
   frontend:
     image: ${DOCKER_USERNAME}/three-tier-app:latest
-      args:
-        - VITE_API_BASE_URL
     container_name: frontend_con
     ports:
       - "80:80"
