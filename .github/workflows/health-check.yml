@@ -37,7 +37,7 @@ jobs:
       - name: Health Check
         id: health
         run: |
-          if curl -f http://localhost:8080/health; then
+          if curl -f http://localhost:80/health; then
             echo "Health check PASSED"
             echo "status=PASSED" >> "$GITHUB_OUTPUT"
           else
